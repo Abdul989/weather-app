@@ -36,10 +36,7 @@ export default class App extends Component {
 		else {
 			return (
 				<div id="app">
-					<Iphone>
-
-						
-					</Iphone>
+					<Iphone/ >
 				</div>
 			);
 		}
