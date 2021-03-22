@@ -26,12 +26,10 @@ export default class Iphone extends Component {
 	// a call to fetch weather data via wunderground 
 	
 	fetchWeatherData = () => {
+		//this.fetchHourlyWeatherTwo();
 		// API URL with a structure of : ttp://api.wunderground.com/api/key/feature/q/country-code/city.json
-		var url = "http://api.openweathermap.org/data/2.5/weather?q=London&units=metric&APPID=b066944d877d9980a5e7667a70704f06";
-		<Forecast
-			{this.props.fetchHourlyWeather}
-		
-		/>
+		var url = "http://api.openweathermap.org/data/2.5/weather?q=London&units=metric&APPID=f4ac5d1f1ca1d23b2dff60f3a350e5c3";
+			
 		$.ajax({
 			url: url,
 			//url1: url1,
@@ -42,21 +40,21 @@ export default class Iphone extends Component {
 		})
 		// once the data grabbed, hide the button
 		this.setState({ display: false });
+		this.fetchForcastData();
 	}
-	/*
-	fetchHourlyWeather = () => {
-		var url = "http://api.openweathermap.org/data/2.5/forecast?q=London&units=metric&mode=json&appid=b066944d877d9980a5e7667a70704f06";
-		//http://api.openweathermap.org/data/2.5/forecast?q=London&units=metric&mode=json&appid=f4ac5d1f1ca1d23b2dff60f3a350e5c3";
+
+
+
+	fetchForcastData = () => {
+		var url = "http://api.openweathermap.org/data/2.5/forecast?q=London&units=metric&APPID=bbe1b2a0cfe9d01b8ff8ceae42cc6ca1";
 		$.ajax({
 			url: url,
 			dataType: "jsonp",
-			success : this.parseHourlyResponse,
+			success : this.parseForcastResponse,
 			error : function(req, err){ console.log('API call failed ' + err); }
 		})
-		this.setState({ display: false });
-
 	}
-	*/
+
 
 	// the main render method for the iphone component
 	render() {
@@ -71,12 +69,12 @@ export default class Iphone extends Component {
 			iconLink="../../assets/icons/rainy.png";
 		}
 
-		
+		if (this.state.AllWeather != undefined) {
 
 		// display all weather data
 		return (
-			<div class={ style.container }>
-				
+		
+			<div class={ style.container }>				
 				<div class={ style.header }>
 					<nav>
 						<div class = {style.leftGrid}>
@@ -84,7 +82,6 @@ export default class Iphone extends Component {
 								<img src="../../assets/icons/settings.png" class={style.settings}></img>
 							</a>
 						</div>
-
 						<div class={ style.city,style.rightGrid } >
 							<a href="#">
 								{ this.state.locate }
@@ -93,41 +90,68 @@ export default class Iphone extends Component {
 						</div>
 	
 					</nav>
+				<div class={style.forecastList}>
+						{ this.createGrid() }
 				</div>
-				
-					<div class={ style.conditions }>{ this.state.cond }</div>
-					<div>
-						<img src={iconLink} class={style.weatherIcons}></img>	
-					</div>
-					<div>
-						{this.props.rows}
-						<ul>	
-
-							<li>{this.state.hourlyTemp}</li>
-							<li>{this.state.hourCond}</li>
-							<li>{this.state.weatherTime}</li>
-						</ul>
-						
-					</div>
-					<span class={ tempStyles }>{ this.state.temp }</span>
+				</div>
+				<div class={ style.conditions }>{ this.state.cond }</div>
+				<div>
+					<img src={iconLink} class={style.weatherIcons}></img>	
+				</div>
+				<span class={ tempStyles }>{ this.state.temp }</span>
 				<div class={ style.details }></div>
 				<div class= { style_iphone.container }> 
 					{ this.state.display ? <Button class={ style_iphone.button } clickFunction={ this.fetchWeatherData }/> : null }
 				</div>
-				
 			</div>
 		);
+
+	}
+	else {
+		return (
+			<div class={ style.container }>
+				<div class={ style.details }></div>
+				<div class= { style_iphone.container }> 
+					{ this.state.display ? <Button class={ style_iphone.button } clickFunction={ this.fetchWeatherData }/> : null }
+				</div>
+			</div>
+		);
+	}
 	
 	};
-	/*iterate through 'list'
-	e.g. for i=0 in list, i<5, i++
-			arr[i] = list[i]
-	store the hourlyTemp, hourCond and weatherTime in a list/array of size 5 (do this in the ajax bit so that everytime refreshes, updates)
-	in the jsx part use the curly brackets to 
+	
 
-	gonna need repaeat many times so create more ul statements to dynamically iterate through, the parseHourlyResponse 
-	or create a new component and in it loop the ul 5 times and then place the component tag in the jsx and will be auto styled 
-	*/
+	createGrid = () => {
+		var listIcon = " "
+		let grid = []
+		for (let i = 0; i < 5; i++) {
+			const currentState = this.state.AllWeather[`${i}`]
+			const currentCond = (currentState['weather']['0']['main'])
+			const time = (currentState['dt_txt'].split(" ")[1]).split(":")
+			const correctTime = `${time[0]}:${time[1]}`
+
+			if (currentCond == "Clouds"){
+				listIcon = "../../assets/icons/clouds.png"
+			}else if(currentCond == "Rain"){
+				listIcon = "../../assets/icons/rainy.png"
+			}else if(currentCond == "Clear"){
+				listIcon = "../../assets/icons/sun.png"
+			}
+
+			grid.push(
+				<div class={ style.forecastList }>
+					<ul> 
+						<li>{ correctTime }</li>
+						<li>
+							<img src={ listIcon } class={ style.forecastIcons }></img>
+						</li>
+						<li>{ currentState['main']['temp'] }</li>
+					</ul>
+				</div>
+			);
+		}
+		return grid;
+	}
 
 	parseCurrentResponse = (parsed_json) => {
 
@@ -147,6 +171,37 @@ export default class Iphone extends Component {
 			);      
 	}
 
+	parseForcastResponse = (parsed_json) => {
+		var AllWeather = parsed_json['list'];
+
+		this.setState({
+			AllWeather: AllWeather
+		});      
+	}
+
+	/*parseHourlyResponseTwo = (parsed_json) => {
+        var mor;
+        var day;
+        var eve;
+        var night;
+		var mainWeather
+        mor = parsed_json['daily']['0']['temp']['morn'];
+        day = parsed_json['daily']['0']['temp']['day'];
+        eve = parsed_json['daily']['0']['temp']['eve'];
+        night = parsed_json['daily']['0']['temp']['night'];
+		mainWeather = parsed_json['daily']['0']['weather']['0']['main']
+
+        this.setState({
+            morning: mor,
+            dayTime : day,
+            evening : eve,
+            nightime : night,
+			mainWeat : mainWeather
+        });
+
+		console.log("hrllo")
+
+    }*/
 
 	/*
 	

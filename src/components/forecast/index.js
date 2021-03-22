@@ -7,65 +7,67 @@ import Iphone from '../iphone'
 
 export default class Forecast extends Component {
 
+    constructor(){
+        super(props);
+        this.fetchHourlyWeatherTwo;
+    }
 
-    fetchHourlyWeather = () => {
-		var url = "http://api.openweathermap.org/data/2.5/forecast?q=London&units=metric&mode=json&appid=b066944d877d9980a5e7667a70704f06";
-		//http://api.openweathermap.org/data/2.5/forecast?q=London&units=metric&mode=json&appid=f4ac5d1f1ca1d23b2dff60f3a350e5c3";
+    fetchHourlyWeatherTwo = () => {
+        var url = "https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&appid=b066944d877d9980a5e7667a70704f06";
 		$.ajax({
 			url: url,
 			dataType: "jsonp",
-			success : this.parseHourlyResponse,
+			success : this.parseHourlyResponseTwo,
 			error : function(req, err){ console.log('API call failed ' + err); }
 		})
 
-    
-    //return <tbody>{rows}</tbody>;
-	}
+    }
+
 
     render(){
-        <Iphone 
-            weatherData = {this.fetchHourlyWeather} 
-        />
-        
-        var rows = [];
-		for (var i = 0; i < 5; i++) {
-			// note: we are adding a key prop here to allow react to uniquely identify each
-			// element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-			rows.push(<Iphone key={i} />);
-		}
-		
+       
         return(
-                    <div>
-						<ul>	
-
-							<li>{this.state.hourlyTemp}</li>
-							<li>{this.state.hourCond}</li>
-							<li>{this.state.weatherTime}</li>
-						</ul>
-                    </div>
+            <div>
+                <table>
+                    <tr>
+                        <td>9 am</td>
+                        <td>1 pm</td>
+                        <td>5 pm</td>
+                        <td>10 pm</td>
+                    </tr>
+                    <tr>
+                        <td>{this.state.morning}</td>
+                        <td>{this.state.dayTime}</td>
+                        <td>{this.state.evening}</td>
+                        <td>{this.state.nightime}</td>
+                    </tr>
+                </table>
+            </div>
         );
     }
 
 
-    parseHourlyResponse = (parsed_json) => {
-
-		console.log("looped "+i+" times")
-		var tempHour = parsed_json['list'][i]['main']['temp'];
-		var hourlyConditions = parsed_json['list'][i]['weather']['0']['main'];
-		var time = parsed_json['list'][i]['dt_txt']
-	
-		// set states for fields so they could be rendered later on
-		this.setState({
-			hourlyTemp: tempHour,
-			hourCond: hourlyConditions,
-			weatherTime : time
-		});      
-		
-
-	}	
 
 
+    parseHourlyResponseTwo = (parsed_json) => {
+        var mor;
+        var day;
+        var eve;
+        var night;
+        mor = parsed_json['daily']['0']['temp']['morn'];
+        day = parsed_json['daily']['0']['temp']['day'];
+        eve = parsed_json['daily']['0']['temp']['eve'];
+        night = parsed_json['daily']['0']['temp']['night'];
 
+
+        this.setState({
+            morning: mor,
+            dayTime : day,
+            evening : eve,
+            nightime : night
+        });
+
+    }
 
 
 }
