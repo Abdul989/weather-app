@@ -70,7 +70,7 @@ export default class Iphone extends Component {
 			}else if(this.state.main === "Rain") {
 				iconLink="../../assets/icons/rainy.png";
 			}else if(this.state.main == "Clear"){
-				listIcon = "../../assets/icons/sun.png"
+				iconLink = "../../assets/icons/sun.png"
 			}
 	
 			if (this.state.AllWeather != undefined) {
@@ -86,26 +86,30 @@ export default class Iphone extends Component {
 								</a>
 							</div>
 							<div class={ style.city,style.rightGrid } >
-								<a id={style.location} href="#" >
-									{ this.state.locate }
-								</a>
 								<img src="../../assets/icons/location-icon.png" class={style.settings}></img>
 							</div>
 		
 						</nav>
+
+					</div>
+					<div>
+						<a id={style.location} href="#" >
+									{ this.state.locate }
+									</a>
+					</div>
+					
+
+					<div>
+						<img src={iconLink} class={style.weatherIcons}></img>
+							
+					</div>
+						<span class={ tempStyles }>{ Math.round(this.state.temp) }</span>
+						<div class={ style.conditions }>{ this.state.cond }</div>
+						<div class={ style.details }></div>
 					<div class={style.forecastList}>
 							{ this.createGrid() }
 					</div>
-					</div>
-					<div class={ style.conditions }>{ this.state.cond }</div>
-					<div>
-						<img src={iconLink} class={style.weatherIcons}></img>	
-					</div>
-					<span class={ tempStyles }>{ this.state.temp }</span>
-					<div class={ style.details }></div>
-					<div>
-						<Button class={ style_iphone.button } clickFunction={this.showCalendar} text={"Show Calendar"}/>
-					</div>	
+					<div><button class={ style.buttonn} onClick={this.showCalendar} ><img class={ style.calender} src="../../assets/icons/calender.png"/></button></div>
 				</div>
 			);
 	
@@ -159,7 +163,7 @@ export default class Iphone extends Component {
 						<li>
 							<img src={ listIcon } class={ style.forecastIcons }></img>
 						</li>
-						<li>{ currentState['main']['temp'] }</li>
+						<li>{ Math.round(currentState['main']['temp']) }</li>
 					</ul>
 				</div>
 			);

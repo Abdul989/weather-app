@@ -18,6 +18,7 @@
 }
 .details {
 	flex: 4;
+	height: 20em;
 }
 .city {
 	flex: 1;
@@ -28,17 +29,15 @@
 	top: 0;
 }
 .conditions {
-	display: inline-block;
-	
-	flex: 1;
-	font-size: 1em;
+	font-size: 20px;
+	padding-top: 2em;
 }
 .temperature {
 	flex: 2;
 	margin-top: 0;
 	font-size: 4.8em;
 	font-weight: 300;
-	letter-spacing: -12px;
+	letter-spacing: -5px;
 }
 .filled:after {
 	content: "°";
@@ -46,7 +45,6 @@
 	font-size: 0.5em;
 	font-weight: 100;
 	display: inline-block;
-	padding-top: 10px;
 	vertical-align: top;
 }
 
@@ -85,6 +83,8 @@ nav{
 	position:fixed;
 	align-items: center;
 	margin: 0;
+	top: 13em;
+	right: 47%;
 }
 
 .forecastIcons{
@@ -97,8 +97,27 @@ nav{
 	list-style-type: none;
 	display: inline-flex;
 	align-items: center;
+	
+	
 }
 
 .forecastList li{
 	list-style-type: none;
+}
+#location{
+	text-decoration: none;
+	right: 30em;
+	font-weight: bold;
+	color: #fff;
+	font-size: 30px;
+
+}
+.calender{
+height: 5em;
+width: 5em;
+}
+.buttonn{
+background-color: transparent;
+background: transparent;
+border: none;
 }
