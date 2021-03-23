@@ -15,10 +15,14 @@ export default class Calendar extends Component {
 	// a constructor with initial set states
 	constructor(props){
 		super(props);
+        this.fetchForcastData()
 		// temperature state
 		this.state.temp = "";
 		// button display state
 		this.setState({ display: true });
+        this.setState({AllWeatherData: ["Null"]});
+        this.setState({fetchedWeather: false});
+        this.setState({fetchedCalendar: false})
 	}
 
 
@@ -27,7 +31,7 @@ export default class Calendar extends Component {
 		$.ajax({
 			url: url,
 			dataType: "jsonp",
-			success : this.parseForcastResponse,
+			success : this.parseCalendarResponse,
 			error : function(req, err){ console.log('API call failed ' + err); }
 		})
 	}
@@ -58,9 +62,12 @@ export default class Calendar extends Component {
 						</div>
 	
 					</nav>
-                    {/*<div class={style.forecastList}>
-                            { this.createGrid() }
-                        </div>*/}
+                    <div class={style.forecastList}>
+                            {this.state.fetchedWeather? this.calendarGrid():null}
+        </div>
+                </div>
+                {/*<div>
+                    {this.state.fetchedCalendar? this.dateGrid():null}
                 </div>
                 {//<div>{ this.dropdownDates() }</div>
                 }
@@ -85,9 +92,10 @@ export default class Calendar extends Component {
 	
 	
 	};
-    dropdownDates = () => {
+    /*dropdownDates = () => {
         for (let i = 0; i<5; i++){
-            const weatherDay = (currentState['dt_txt'].split(" ")[0])
+            var stateNow = this.state.AllWeatherData[`${i}`]
+            const weatherDay = (stateNow['dt_txt'].split(" ")[0])
             console.log(weatherDay)
             let dateGrid = []
             dateGrid.push(
@@ -103,45 +111,60 @@ export default class Calendar extends Component {
         }
         return dateGrid;
     }
-
-	createGrid = () => {
-		var listIcon = " "
-		let grid = []
-		for (let i = 0; i < 5; i++) {
-			const currentState = this.state.AllWeather[`${i}`]
-			const currentCond = (currentState['weather']['0']['main'])
-			const time = (currentState['dt_txt'].split(" ")[1]).split(":")
-			const correctTime = `${time[0]}:${time[1]}`
-
-			if (currentCond == "Clouds"){
+*/
+	calendarGrid = () => {
+        
+        var listIcon = " "
+		let calendarGrid = []
+		for (let j = 0; j < 5; j++) {
+			var stateNow = this.state.AllWeatherData[`${j}`]
+			var condNow = (stateNow['weather']['0']['main'])
+			var timeNow = (stateNow['dt_txt'].split(" ")[1]).split(":")
+			var correctTimeNow = `${timeNow[0]}:${timeNow[1]}`
+            var forecastDay = (stateNow['dt_txt'].split(" ")[0])//Make an input and set the date entered to this variable
+            //console.log(forecastDay)
+			if (condNow == "Clouds"){
 				listIcon = "../../assets/icons/clouds.png"
-			}else if(currentCond == "Rain"){
+			}else if(condNow == "Rain"){
 				listIcon = "../../assets/icons/rainy.png"
-			}else if(currentCond == "Clear"){
+			}else if(condNow == "Clear"){
 				listIcon = "../../assets/icons/sun.png"
 			}
+            
+			calendarGrid.push(
 
-			grid.push(
-				<div class={ style.forecastList }>
-					<ul> 
-						<li>{ correctTime }</li>
-						<li>
-							<img src={ listIcon } class={ style.forecastIcons }></img>
-						</li>
-						<li>{ currentState['main']['temp'] }</li>
-					</ul>
-				</div>
-			);
+                <div class={ style.forecastList }>
+                        <ul> 
+                            <li>{ correctTimeNow }</li>
+                            <li>
+                                <img src={ listIcon } class={ style.forecastIcons }></img>
+                            </li>
+                            <li>{ stateNow['main']['temp'] }</li>
+                        </ul>
+                </div>
+                
+            )
 		}
-		return grid;
+		return (
+            calendarGrid,
+            <select >
+                        <option value="N/A">N/A</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+            </select>
+        );
 	}
 
-	parseForcastResponse = (parsed_json) => {
-		var AllWeather = parsed_json['list'];
+	parseCalendarResponse = (parsed_json) => {
+		var AllWeatherData = parsed_json['list'];
 
 		this.setState({
-			AllWeather: AllWeather
-		});      
+			AllWeatherData: AllWeatherData,
+            fetchedWeather: true,
+            fetchedCalendar: true
+		});  
 	}
 
 }

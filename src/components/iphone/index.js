@@ -86,7 +86,7 @@ export default class Iphone extends Component {
 								</a>
 							</div>
 							<div class={ style.city,style.rightGrid } >
-								<a href="#">
+								<a id={style.location} href="#" >
 									{ this.state.locate }
 								</a>
 								<img src="../../assets/icons/location-icon.png" class={style.settings}></img>
