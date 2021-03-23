@@ -9,7 +9,8 @@ import $ from 'jquery';
 // import the Button component
 import Button from '../button';
 // import the Forecast component
-import Forecast from '../forecast';
+import Calendar from './calendar';
+
 
 export default class Iphone extends Component {
 //var Iphone = React.createClass({
@@ -21,8 +22,8 @@ export default class Iphone extends Component {
 		this.state.temp = "";
 		// button display state
 		this.setState({ display: true });
+		this.setState({calendar: false})
 	}
-	//use the 48 hourly api because it gives all the info wee need as oppsed to using two api's, we can use this for the longer forecast aswell  because we can say its more accurate for the cyclist as the dataes get shorter and further less accurate 
 	// a call to fetch weather data via wunderground 
 	
 	fetchWeatherData = () => {
@@ -32,7 +33,6 @@ export default class Iphone extends Component {
 			
 		$.ajax({
 			url: url,
-			//url1: url1,
 			dataType: "jsonp",
 			success : this.parseCurrentResponse,
 			error : function(req, err){ console.log('API call failed ' + err); }
@@ -58,68 +58,82 @@ export default class Iphone extends Component {
 
 	// the main render method for the iphone component
 	render() {
-		// check if temperature data is fetched, if so add the sign styling to the page
-		const tempStyles = this.state.temp ? `${style.temperature} ${style.filled}` : style.temperature;
-		var hourly = this.state.hourlyTemp;
-		var iconLink = " "; 
-		if (this.state.main === "Clouds"){
-			iconLink = "../../assets/icons/clouds.png";
-		}
-		else if(this.state.main === "Rain") {
-			iconLink="../../assets/icons/rainy.png";
-		}
+		if (this.state.calendar == false){
 
-		if (this.state.AllWeather != undefined) {
-
-		// display all weather data
-		return (
-		
-			<div class={ style.container }>				
-				<div class={ style.header }>
-					<nav>
-						<div class = {style.leftGrid}>
-							<a href="#">
-								<img src="../../assets/icons/settings.png" class={style.settings}></img>
-							</a>
-						</div>
-						<div class={ style.city,style.rightGrid } >
-							<a href="#">
-								{ this.state.locate }
-							</a>
-							<img src="../../assets/icons/location-icon.png" class={style.settings}></img>
-						</div>
+			// check if temperature data is fetched, if so add the sign styling to the page
+			const tempStyles = this.state.temp ? `${style.temperature} ${style.filled}` : style.temperature;
+			var hourly = this.state.hourlyTemp;
+			var iconLink = " "; 
+			//Change Weather icons depending on conditions
+			if (this.state.main === "Clouds"){
+				iconLink = "../../assets/icons/clouds.png";
+			}else if(this.state.main === "Rain") {
+				iconLink="../../assets/icons/rainy.png";
+			}else if(this.state.main == "Clear"){
+				listIcon = "../../assets/icons/sun.png"
+			}
 	
-					</nav>
-				<div class={style.forecastList}>
-						{ this.createGrid() }
+			if (this.state.AllWeather != undefined) {
+	
+			// display all weather data
+			return (
+				<div class={ style.container }>				
+					<div class={ style.header }>
+						<nav>
+							<div class = {style.leftGrid}>
+								<a href="#">
+									<img src="../../assets/icons/settings.png" class={style.settings}></img>
+								</a>
+							</div>
+							<div class={ style.city,style.rightGrid } >
+								<a href="#">
+									{ this.state.locate }
+								</a>
+								<img src="../../assets/icons/location-icon.png" class={style.settings}></img>
+							</div>
+		
+						</nav>
+					<div class={style.forecastList}>
+							{ this.createGrid() }
+					</div>
+					</div>
+					<div class={ style.conditions }>{ this.state.cond }</div>
+					<div>
+						<img src={iconLink} class={style.weatherIcons}></img>	
+					</div>
+					<span class={ tempStyles }>{ this.state.temp }</span>
+					<div class={ style.details }></div>
+					<div>
+						<Button class={ style_iphone.button } clickFunction={this.showCalendar} text={"Show Calendar"}/>
+					</div>	
 				</div>
+			);
+	
+		}
+		else {
+			return (
+				<div class={ style.container }>
+					<div class={ style.details }></div>
+					<div class= { style_iphone.container }> 
+						{ this.state.display ? <Button class={ style_iphone.button } clickFunction={ this.fetchWeatherData} text={"Show Weather"}/> : null }
+					</div>
 				</div>
-				<div class={ style.conditions }>{ this.state.cond }</div>
-				<div>
-					<img src={iconLink} class={style.weatherIcons}></img>	
-				</div>
-				<span class={ tempStyles }>{ this.state.temp }</span>
-				<div class={ style.details }></div>
-				<div class= { style_iphone.container }> 
-					{ this.state.display ? <Button class={ style_iphone.button } clickFunction={ this.fetchWeatherData }/> : null }
-				</div>
-			</div>
-		);
-
-	}
-	else {
-		return (
-			<div class={ style.container }>
-				<div class={ style.details }></div>
-				<div class= { style_iphone.container }> 
-					{ this.state.display ? <Button class={ style_iphone.button } clickFunction={ this.fetchWeatherData }/> : null }
-				</div>
-			</div>
-		);
-	}
+			);
+		}
+		}
+		else{
+			return(
+			<div>
+				<Calendar/>
+			</div>);
+		}
 	
 	};
 	
+	showCalendar = () => {
+		this.setState({calendar: true})
+
+	}
 
 	createGrid = () => {
 		var listIcon = " "
@@ -179,49 +193,4 @@ export default class Iphone extends Component {
 		});      
 	}
 
-	/*parseHourlyResponseTwo = (parsed_json) => {
-        var mor;
-        var day;
-        var eve;
-        var night;
-		var mainWeather
-        mor = parsed_json['daily']['0']['temp']['morn'];
-        day = parsed_json['daily']['0']['temp']['day'];
-        eve = parsed_json['daily']['0']['temp']['eve'];
-        night = parsed_json['daily']['0']['temp']['night'];
-		mainWeather = parsed_json['daily']['0']['weather']['0']['main']
-
-        this.setState({
-            morning: mor,
-            dayTime : day,
-            evening : eve,
-            nightime : night,
-			mainWeat : mainWeather
-        });
-
-		console.log("hrllo")
-
-    }*/
-
-	/*
-	
-	parseHourlyResponse = (parsed_json) => {
-		
-		for (let i = 0; i<5; i++){
-			console.log("looped "+i+" times")
-			var tempHour = parsed_json['list'][i]['main']['temp'];
-			var hourlyConditions = parsed_json['list'][i]['weather']['0']['main'];
-			var time = parsed_json['list'][i]['dt_txt']
-	
-			// set states for fields so they could be rendered later on
-			this.setState({
-				hourlyTemp: tempHour,
-				hourCond: hourlyConditions,
-				weatherTime : time
-			});      
-		}
-		
-	
-	}	
-	*/
 }
