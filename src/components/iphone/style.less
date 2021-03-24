@@ -2,12 +2,12 @@
 
 .container { 
 	background-image: url('../../assets/backgrounds/blue.jpg');
-	color: #fff;
+	color: rgb(0, 0, 0);
 	width: 414px;
 	height: 736px;
 	text-align: center;
 	padding-top: 15px;
-	margin: 0 auto;
+	margin: auto;
 }
 .header {
 
@@ -49,18 +49,6 @@ nav{
 	margin: 0;
 }
 
-.leftGrid{
-	grid-column: 1;
-	
-}
-
-
-
-.rightGrid{
-	grid-column: 2;
-}
-
-
 .settings{
 	width:37px;
 	height:37px;
@@ -69,12 +57,9 @@ nav{
 }
 
 .weatherIcons{
-	width:74px;
 	height:74px;
-	align-items: center;
 	margin: 0;
 	top: 13em;
-	right: 45%;
 }
 
 .forecastIcons{
@@ -86,8 +71,10 @@ nav{
 .forecastList{
 	list-style-type: none;
 	display: inline-flex;
-	padding-left: 0%;
+	padding-left: 5%;
 	margin-left: 0%;
+	padding-bottom: 6em;
+	
 
 }
 
@@ -98,16 +85,52 @@ nav{
 	text-decoration: none;
 	right: 30em;
 	font-weight: bold;
-	color: #fff;
+	color: rgb(0, 0, 0);
 	font-size: 30px;
 
 }
-.calender{
-height: 5em;
-width: 5em;
+.windbutton{
+	height: 4em;
+	width: 4em;
 }
-.buttonn{
-background-color: transparent;
-background: transparent;
-border: none;
+.calenderbutton{
+	height: 4em;
+	width: 4em;
+}
+.mapbutton{
+	height: 4em;
+	width: 4em;
+}
+.homebutton{
+	height: 4em;
+	width: 4em;
+}
+.calender{
+	background-color: royalblue;
+	border-radius: 50%;
+	width: 7em;
+	height: 7em;
+	float: right;
+	border: none;
+	margin-right: 2em;
+}
+.forecastorder{
+	padding-right: 0.85em;
+	margin: auto;
+}
+.wind{
+	background-color: royalblue;
+	border-radius: 50%;
+	width: 7em;
+	height: 7em;
+	border: none;
+}
+.map{
+	background-color: royalblue;
+	border-radius: 50%;
+	width: 7em;
+	height: 7em;
+	float: left;
+	border: none;
+	margin-left: 2em;
 }

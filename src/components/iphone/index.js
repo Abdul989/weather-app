@@ -106,10 +106,12 @@ export default class Iphone extends Component {
 						<span class={ tempStyles }>{ Math.round(this.state.temp) }</span>
 						<div class={ style.conditions }>{ this.state.cond }</div>
 						<div class={ style.details }></div>
-					<div class={style.forecastList}>
+					<div class={style.forecastorder}>
 							{ this.createGrid() }
 					</div>
-					<div><button class={ style.buttonn} onClick={this.showCalendar} ><img class={ style.calender} src="../../assets/icons/calender.png"/></button></div>
+					<div><button class={ style.wind} onClick={this.showCalender} ><img class={ style.windbutton} src="../../assets/icons/wind.png"/></button></div>
+					<div><button class={ style.calender} onClick={this.showCalendar} ><img class={ style.calenderbutton} src="../../assets/icons/calendar.png"/></button></div>
+					<div><button class={ style.map} onClick={this.showCalendar} ><img class={ style.mapbutton} src="../../assets/icons/map.png"/></button></div>
 				</div>
 			);
 	
@@ -158,13 +160,19 @@ export default class Iphone extends Component {
 
 			grid.push(
 				<div class={ style.forecastList }>
-					<ul> 
-						<li>{ correctTime }</li>
-						<li>
+					<table>
+						<tr> 
+						<th>{ correctTime }</th>
+						</tr>
+						<tr>
+						<td>
 							<img src={ listIcon } class={ style.forecastIcons }></img>
-						</li>
-						<li>{ Math.round(currentState['main']['temp']) }</li>
-					</ul>
+						</td>
+						</tr>
+						<tr>
+						<td>{ Math.round(currentState['main']['temp']) }</td>
+						</tr>
+					</table>
 				</div>
 			);
 		}

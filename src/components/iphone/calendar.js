@@ -6,6 +6,7 @@ import style from './style';
 import style_iphone from '../button/style_iphone';
 // import jquery for API calls
 import $ from 'jquery';
+import Iphone from './index';
 
 
 
@@ -23,6 +24,7 @@ export default class Calendar extends Component {
         this.setState({AllWeatherData: ["Null"]});
         this.setState({fetchedWeather: false});
         this.setState({fetchedCalendar: false})
+        this.setState({Home: false})
 	}
 
 
@@ -40,7 +42,9 @@ export default class Calendar extends Component {
 	// the main render method for the iphone component
 	render() {
 	
+        if(this.state.Home==false){
 
+        
 		
 		// display all weather data
 		return (
@@ -84,10 +88,17 @@ export default class Calendar extends Component {
                 
                 <span class={ style.tempStyles }>{ this.state.temp }</span>
                 <div class={ style.details }></div> 
+
+                    <div><button class={ style.wind} onClick={this.showHome} ><img class={ style.windbutton} src="../../assets/icons/home.png"/></button></div>
+					<div><button class={ style.calender} onClick={this.showCalendar} ><img class={ style.homebutton} src="../../assets/icons/wind.png"/></button></div>
+					<div><button class={ style.map} onClick={this.showCalendar} ><img class={ style.mapbutton} src="../../assets/icons/map.png"/></button></div>
               	
             </div>
 		);
-
+            }
+            else{
+                return(<div><Iphone/></div>);
+            }
 	
 	
 	
@@ -135,15 +146,19 @@ export default class Calendar extends Component {
 			calendarGrid.push(
 
                 <div class={ style.forecastList }>
-                        <ul> 
-                            <li>{ correctTimeNow }</li>
-                            <li>
+                        <table> 
+                            <tr><th>{ correctTimeNow }</th></tr>
+                            <tr>
+                            <td>
                                 <img src={ listIcon } class={ style.forecastIcons }></img>
-                            </li>
-                            <li>{ stateNow['main']['temp'] }</li>
-                        </ul>
+                            </td>
+                            </tr>
+                            <tr>
+                            <td>{ Math.round(stateNow['main']['temp']) }</td>
+                            </tr>
+                        </table>
                 </div>
-            
+                
                 
             )
 
@@ -162,7 +177,10 @@ export default class Calendar extends Component {
             calendarGrid
         );
 	}
+    showHome = () => {
+		this.setState({Home: true})
 
+	}
 	parseCalendarResponse = (parsed_json) => {
 		var AllWeatherData = parsed_json['list'];
 
