@@ -17,6 +17,7 @@ export default class Calendar extends Component {
 	constructor(props){
 		super(props);
         this.fetchForcastData()
+        this.fetchDailyData()
 		// temperature state
 		this.state.temp = "";
 		// button display state
@@ -38,6 +39,17 @@ export default class Calendar extends Component {
 		})
 	}
 
+    fetchDailyData = () => {
+		var url = "https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&exclude=hourly,daily&appid=397250a17c59b179d4cfda27526c0daa";
+		$.ajax({
+			url: url,
+			dataType: "jsonp",
+			success : this.parseDailyResponse,
+			error : function(req, err){ console.log('API call failed ' + err); }
+		})
+	}
+
+
 
 	// the main render method for the iphone component
 	render() {
@@ -50,7 +62,7 @@ export default class Calendar extends Component {
 		return (
 		
 			<div class={ style.container }>		
-            <h1>HElllo</h1>		
+            <h1>Calender</h1>		
 				<div class={ style.header }>
 					<nav>
 						<div class = {style.leftGrid}>
@@ -75,15 +87,17 @@ export default class Calendar extends Component {
                 </div>
                 {//<div>{ this.dropdownDates() }</div>
                 }
-                {/*<div>
+            */}
+                <div>
                     <select id = "dropdown">
-                        <option value="N/A">N/A</option>
+                        <option value="N/A">Choose day</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
+                        <option value="5">5</option>
                     </select>
-                </div>*/}
+                </div>
                 <div class={ style.conditions }>{ this.state.cond }</div>
                 
                 <span class={ style.tempStyles }>{ this.state.temp }</span>
@@ -190,5 +204,11 @@ export default class Calendar extends Component {
             fetchedCalendar: true
 		});  
 	}
+    parseDailyResponse = (parsed_json) => {
+        
+        var AllWeatherData = parsed_json['list'];
+
+        this
+    }
 
 }
