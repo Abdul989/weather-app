@@ -68,22 +68,8 @@ export default class Calendar extends Component {
                             {this.state.fetchedWeather? this.calendarGrid():null}
         </div>
                 </div>
-                {/*<div>
-                    {this.state.fetchedCalendar? this.dateGrid():null}
-                </div>
-                {//<div>{ this.dropdownDates() }</div>
-                }
-            */}
-                <div>
-                    <select id = "dropdown">
-                        <option value="N/A">Choose day</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
+
+
                 <div>
                     {this.state.fetchedWeather?  this.weekdays(): null }</div>
                 <div class={ style.conditions }>{ this.state.cond }</div>
@@ -106,28 +92,9 @@ export default class Calendar extends Component {
 	
 	
 	};
-    /*dropdownDates = () => {
-        for (let i = 0; i<5; i++){
-            var stateNow = this.state.AllWeatherData[`${i}`]
-            const weatherDay = (stateNow['dt_txt'].split(" ")[0])
-            console.log(weatherDay)
-            let dateGrid = []
-            dateGrid.push(
-                <div>
-                    <select>
-                        <option value={weatherDay}>Orange</option>
-                        <option value={weatherDay}>Radish</option>
-                        <option value={weatherDay}>Cherry</option>
-                    </select>
-                    <p>{message}</p>
-                </div>
-            )
-        }
-        return dateGrid;
-    }
-*/
+
 	calendarGrid = () => {
-        
+        //console.log("This is the value of l: "+l)
         var listIcon = " "
 		let calendarGrid = []
         let weekDay = []
@@ -171,20 +138,52 @@ export default class Calendar extends Component {
             calendarGrid
         );
 	}
+
+    dropdownDay = (weekDay,days) => {
+        let chosenDate
+        let l
+        let dropdownList = []
+        for(l=0; l<weekDay.length; l++){
+            dropdownList.push( 
+                <option value={l}>{weekDay[l]}</option>
+            )
+        }
+
+        for (let apiIndex = 0; apiIndex<this.state.AllWeatherData.length; apiIndex++){
+            if (days.includes(this.state.AllWeatherData[apiIndex]['dt_txt'].split(" ")[0])){
+                console.log("They match at linst index: "+apiIndex) 
+                chosenDate = apiIndex
+                break
+            }else{
+                console.log("There is no common item.")
+                
+            }
+            
+        }
+        console.log(days)
+        //console.log(chosenDate)
+            return(
+                <div>
+                    <select>
+                        {dropdownList}
+                    </select>
+                </div>
+            )
+    }
+
     weekdays = () => {
         let weekDay = []
+        let days = []
         var j;
         for ( j = 0; j < 33; j+=8) {
             var stateNow = this.state.AllWeatherData[j]
-            var forecastDay = stateNow['dt_txt']//Make an input and set the date entered to this variable
-            console.log(weekDay);
-            console.log(stateNow);
+            var forecastDay = stateNow['dt_txt'].split(" ")[0]//Make an input and set the date entered to this variable
+            days.push(forecastDay)
             console.log(forecastDay);
-            console.log(j);
             weekDay.push(forecastDay);
-    
-            }
-        return (weekDay);
+        }
+        return (this.dropdownDay(weekDay,days));
+        
     }
     showHome = () => {
 		this.setState({Home: true})
