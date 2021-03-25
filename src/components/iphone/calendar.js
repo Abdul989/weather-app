@@ -17,14 +17,13 @@ export default class Calendar extends Component {
 	constructor(props){
 		super(props);
         this.fetchForcastData()
-        this.fetchDailyData()
 		// temperature state
 		this.state.temp = "";
 		// button display state
 		this.setState({ display: true });
         this.setState({AllWeatherData: ["Null"]});
         this.setState({fetchedWeather: false});
-        this.setState({fetchedCalendar: false})
+        this.setState({fetchedCalendar: false});
         this.setState({Home: false})
 	}
 
@@ -39,24 +38,11 @@ export default class Calendar extends Component {
 		})
 	}
 
-    fetchDailyData = () => {
-		var url = "https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&exclude=hourly,daily&appid=397250a17c59b179d4cfda27526c0daa";
-		$.ajax({
-			url: url,
-			dataType: "jsonp",
-			success : this.parseDailyResponse,
-			error : function(req, err){ console.log('API call failed ' + err); }
-		})
-	}
-
-
 
 	// the main render method for the iphone component
 	render() {
 	
         if(this.state.Home==false){
-
-        
 		
 		// display all weather data
 		return (
@@ -98,10 +84,13 @@ export default class Calendar extends Component {
                         <option value="5">5</option>
                     </select>
                 </div>
+                <div>
+                    {this.state.fetchedWeather?  this.weekdays(): null }</div>
                 <div class={ style.conditions }>{ this.state.cond }</div>
                 
                 <span class={ style.tempStyles }>{ this.state.temp }</span>
-                <div class={ style.details }></div> 
+                <div class={ style.details }>
+                    </div> 
 
                     <div><button class={ style.wind} onClick={this.showHome} ><img class={ style.windbutton} src="../../assets/icons/home.png"/></button></div>
 					<div><button class={ style.calender} onClick={this.showCalendar} ><img class={ style.homebutton} src="../../assets/icons/wind.png"/></button></div>
@@ -149,6 +138,7 @@ export default class Calendar extends Component {
 			var correctTimeNow = `${timeNow[0]}:${timeNow[1]}`
             var forecastDay = (stateNow['dt_txt'].split(" ")[0])//Make an input and set the date entered to this variable
             //console.log(forecastDay)
+            weekDay.push(forecastDay);
 			if (condNow == "Clouds"){
 				listIcon = "../../assets/icons/clouds.png"
 			}else if(condNow == "Rain"){
@@ -174,23 +164,28 @@ export default class Calendar extends Component {
                 </div>
                 
                 
-            )
+                )
 
-            weekDay.push(
-            <select >
-                        <option value="N/A">N/A</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-            </select>
-
-            )
 		}
 		return (
             calendarGrid
         );
 	}
+    weekdays = () => {
+        let weekDay = []
+        var j;
+        for ( j = 0; j < 33; j+=8) {
+            var stateNow = this.state.AllWeatherData[j]
+            var forecastDay = stateNow['dt_txt']//Make an input and set the date entered to this variable
+            console.log(weekDay);
+            console.log(stateNow);
+            console.log(forecastDay);
+            console.log(j);
+            weekDay.push(forecastDay);
+    
+            }
+        return (weekDay);
+    }
     showHome = () => {
 		this.setState({Home: true})
 
@@ -204,11 +199,5 @@ export default class Calendar extends Component {
             fetchedCalendar: true
 		});  
 	}
-    parseDailyResponse = (parsed_json) => {
-        
-        var AllWeatherData = parsed_json['list'];
-
-        this
-    }
 
 }
