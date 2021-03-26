@@ -17,9 +17,10 @@
 .city {
 	font-size: 1.7em;
 	font-weight: 400;
-	display: inline-block;
 	position: fixed;
 	top: 0;
+}
+.rightGrid{
 }
 .conditions {
 	font-size: 20px;
@@ -76,7 +77,9 @@ nav{
 	
 
 }
-
+.setting{
+	padding-right: 15em;
+}
 .forecastList li{
 	list-style-type: none;
 }
@@ -85,7 +88,7 @@ nav{
 	right: 30em;
 	font-weight: bold;
 	color: rgb(0, 0, 0);
-	font-size: 30px;
+	font-size: 20px;
 
 }
 .title{
@@ -149,8 +152,12 @@ nav{
 	font-size: 2em;
 }
 .dropdown{
+	position: absolute;
+	background-color: #f1f1f1;
+	min-width: 160px;
+	overflow: auto;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-	border: none;
+	z-index: 1;
 }
 .mySelect{
 	color: #000000;

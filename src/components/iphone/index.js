@@ -81,23 +81,21 @@ export default class Iphone extends Component {
 				<div class={ style.container }>				
 					<div class={ style.header }>
 						<nav>
-							<div class = {style.leftGrid}>
-								<a href="#">
-									<img src="../../assets/icons/settings.png" class={style.settings}></img>
-								</a>
-							</div>
-							<div class={ style.city,style.rightGrid } >
-								<img src="../../assets/icons/location-icon.png" class={style.settings}></img>
-							</div>
+							<table class = {style.leftGrid}>
+								<tr>
+									
+									<td class={style.setting} ><a href="#"><img src="../../assets/icons/settings.png" class={style.settings}></img></a></td>
+									
+									<td class={style.location}><a id={style.location} href="#" >{ this.state.locate }</a></td>
+
+									<td><img src="../../assets/icons/location-icon.png" class={style.settings}></img></td>
+								</tr>
+							</table>
 		
 						</nav>
-
 					</div>
-					<div>
-						<a id={style.location} href="#" >
-									{ this.state.locate }
-									</a>
-					</div>
+					<div class={style.title}>Today</div>
+					
 					
 
 					<div>

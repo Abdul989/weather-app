@@ -55,25 +55,25 @@ export default class Calendar extends Component {
 			<div class={ style.container }>		
             <div class={ style.header }>
 					<nav>
-						<div class = {style.leftGrid}>
-							<a href="#">
-								<img src="../../assets/icons/settings.png" class={style.settings}></img>
-							</a>
-						</div>
-						<div class={ style.city,style.rightGrid } >
-							<a href="#">
-								{ this.state.locate }
-							</a>
-							<img src="../../assets/icons/location-icon.png" class={style.settings}></img>
-						</div>
+                    <table class = {style.leftGrid}>
+								<tr>
+									
+									<td class={style.setting} ><a href="#"><img src="../../assets/icons/settings.png" class={style.settings}></img></a></td>
+									
+									<td class={style.location}><a id={style.location} href="#" >{ this.state.location }</a></td>
+
+									<td><img src="../../assets/icons/location-icon.png" class={style.settings}></img></td>
+								</tr>
+							</table>
                         </nav>
                         <div class={style.title}>Calender</div>
                         <div>{this.state.fetchedWeather?  this.weekdays(): null }</div>
                 </div>
                 <div class={ style.conditions }>{ this.state.cond }</div>
-                
+                <br></br>
                 <span class={ style.tempStyles }>{ this.state.temp }</span>
                 <div class={ style.details }>
+                    
                     </div> 
 
                     <div><button class={ style.wind} onClick={this.showHome} ><img class={ style.windbutton} src="../../assets/icons/home.png"/></button></div>
@@ -214,8 +214,10 @@ export default class Calendar extends Component {
 	}
 	parseCalendarResponse = (parsed_json) => {
 		var AllWeatherData = parsed_json['list'];
-
+        var locate = parsed_json['city']['name'];
+        console.log(locate)
 		this.setState({
+            location: locate,
 			AllWeatherData: AllWeatherData,
             fetchedWeather: true,
             fetchedCalendar: true
