@@ -17,6 +17,9 @@ export default class Calendar extends Component {
 	constructor(props){
 		super(props);
         this.fetchForcastData()
+        this.state = {
+            selectValue: 0
+          };
 		// temperature state
 		this.state.temp = "";
 		// button display state
@@ -25,6 +28,8 @@ export default class Calendar extends Component {
         this.setState({fetchedWeather: false});
         this.setState({fetchedCalendar: false});
         this.setState({Home: false})
+        this.handleDropdownChange = this.handleDropdownChange.bind(this);
+
 	}
 
 
@@ -48,8 +53,7 @@ export default class Calendar extends Component {
 		return (
 		
 			<div class={ style.container }>		
-            <h1>Calender</h1>		
-				<div class={ style.header }>
+            <div class={ style.header }>
 					<nav>
 						<div class = {style.leftGrid}>
 							<a href="#">
@@ -62,16 +66,10 @@ export default class Calendar extends Component {
 							</a>
 							<img src="../../assets/icons/location-icon.png" class={style.settings}></img>
 						</div>
-	
-					</nav>
-                    <div class={style.forecastList}>
-                            {this.state.fetchedWeather? this.calendarGrid():null}
-        </div>
+                        </nav>
+                        <div class={style.title}>Calender</div>
+                        <div>{this.state.fetchedWeather?  this.weekdays(): null }</div>
                 </div>
-
-
-                <div>
-                    {this.state.fetchedWeather?  this.weekdays(): null }</div>
                 <div class={ style.conditions }>{ this.state.cond }</div>
                 
                 <span class={ style.tempStyles }>{ this.state.temp }</span>
@@ -138,14 +136,18 @@ export default class Calendar extends Component {
             calendarGrid
         );
 	}
+    handleDropdownChange(e) {
+        this.setState({ selectValue: e.target.value });
+      }
 
-    dropdownDay = (weekDay,days) => {
+    dropdownDay = (weekDay,days,weather,degree) => {
+        let x
         let chosenDate
         let l
         let dropdownList = []
         for(l=0; l<weekDay.length; l++){
             dropdownList.push( 
-                <option value={l}>{weekDay[l]}</option>
+                <option class={style.dropdown} value={l}>{weekDay[l]}</option>
             )
         }
 
@@ -160,29 +162,50 @@ export default class Calendar extends Component {
             }
             
         }
-        console.log(days)
+
         //console.log(chosenDate)
             return(
                 <div>
-                    <select>
-                        {dropdownList}
-                    </select>
-                </div>
+                      Select Date: <select class={style.mySelect} onChange={this.handleDropdownChange} >{dropdownList}</select>
+                    <h3>{weekDay[this.state.selectValue]}
+                    <br/>
+                    <img src={ this.displayImage(weather[this.state.selectValue]) } class={ style.calenderIcons }></img>
+                    <br/>
+                    <div class={style.calendarfont} >{degree[this.state.selectValue]}°</div>
+                    {weather[this.state.selectValue]}
+                    </h3>
+                    </div>
             )
     }
-
+    displayImage = (condNow) => {
+        let listIcon = ""
+        if (condNow == "Clouds"){
+            listIcon = "../../assets/icons/clouds.png"
+        }else if(condNow == "Rain"){
+            listIcon = "../../assets/icons/rainy.png"
+        }else if(condNow == "Clear"){
+            listIcon = "../../assets/icons/sun.png"
+        }
+        return listIcon;
+    }
     weekdays = () => {
         let weekDay = []
         let days = []
+        let weather = []
+        let degree = []
         var j;
         for ( j = 0; j < 33; j+=8) {
             var stateNow = this.state.AllWeatherData[j]
+            var condNow = (stateNow['weather']['0']['main'])
+            degree.push(Math.round(stateNow['main']['temp'])) 
+            weather.push(condNow);
             var forecastDay = stateNow['dt_txt'].split(" ")[0]//Make an input and set the date entered to this variable
             days.push(forecastDay)
             console.log(forecastDay);
             weekDay.push(forecastDay);
+            
         }
-        return (this.dropdownDay(weekDay,days));
+        return (this.dropdownDay(weekDay,days,weather,degree));
         
     }
     showHome = () => {
