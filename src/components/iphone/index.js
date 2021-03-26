@@ -22,7 +22,8 @@ export default class Iphone extends Component {
 		this.state.temp = "";
 		// button display state
 		this.setState({ display: true });
-		this.setState({calendar: false})
+		this.setState({calendar: false});
+		this.setState({wind: false});
 	}
 	// a call to fetch weather data via wunderground 
 	
