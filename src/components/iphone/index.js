@@ -10,6 +10,7 @@ import $ from 'jquery';
 import Button from '../button';
 // import the Forecast component
 import Calendar from './calendar';
+import Wind from './wind';
 
 
 export default class Iphone extends Component {
@@ -24,6 +25,9 @@ export default class Iphone extends Component {
 		this.setState({ display: true });
 		this.setState({calendar: false});
 		this.setState({wind: false});
+		this.setState({Home: true});
+		this.setState({map: false})
+
 	}
 	// a call to fetch weather data via wunderground 
 	
@@ -59,7 +63,7 @@ export default class Iphone extends Component {
 
 	// the main render method for the iphone component
 	render() {
-		if (this.state.calendar == false){
+		if (this.state.Home == true){
 
 			// check if temperature data is fetched, if so add the sign styling to the page
 			const tempStyles = this.state.temp ? `${style.temperature} ${style.filled}` : style.temperature;
@@ -108,9 +112,9 @@ export default class Iphone extends Component {
 					<div class={style.forecastorder}>
 							{ this.createGrid() }
 					</div>
-					<div><button class={ style.wind} onClick={this.showCalender} ><img class={ style.windbutton} src="../../assets/icons/wind.png"/></button></div>
+					<div><button class={ style.wind} onClick={this.showWind} ><img class={ style.windbutton} src="../../assets/icons/wind.png"/></button></div>
 					<div><button class={ style.calender} onClick={this.showCalendar} ><img class={ style.calenderbutton} src="../../assets/icons/calendar.png"/></button></div>
-					<div><button class={ style.map} onClick={this.showCalendar} ><img class={ style.mapbutton} src="../../assets/icons/map.png"/></button></div>
+					<div><button class={ style.map} onClick={this.showMap} ><img class={ style.mapbutton} src="../../assets/icons/map.png"/></button></div>
 				</div>
 			);
 	
@@ -126,18 +130,48 @@ export default class Iphone extends Component {
 			);
 		}
 		}
-		else{
+		else if(this.state.calendar == true) {
+			console.log("hhdhdhdhdhhd")
 			return(
 			<div>
 				<Calendar/>
 			</div>);
+		}else if(this.state.wind == true){
+			console.log("hhdhdhdhdhhd#2")
+			return(
+				<div>
+					<Wind/>
+				</div>);
+		}else if(this.state.map == true){
+			console.log("hhdhdhdhdhhd#2")
+			return(
+				<div>
+					<Map/>
+				</div>);
 		}
+
 	
 	};
 	
 	showCalendar = () => {
 		this.setState({calendar: true})
+		this.setState({Home: false})
 
+
+	}
+
+	showMap = () => {
+		this.setState({calendar: true})
+		this.setState({Home: false})
+
+
+	}
+
+	showWind = () => {
+		this.setState({wind: true})
+		this.setState({Home: false})
+
+		console.log("Apple Raspberry")
 	}
 
 	createGrid = () => {

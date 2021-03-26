@@ -7,6 +7,7 @@ import style_iphone from '../button/style_iphone';
 // import jquery for API calls
 import $ from 'jquery';
 import Iphone from './index';
+import Wind from './wind'
 
 
 
@@ -76,15 +77,31 @@ export default class Calendar extends Component {
                     
                     </div> 
 
-                    <div><button class={ style.wind} onClick={this.showHome} ><img class={ style.windbutton} src="../../assets/icons/home.png"/></button></div>
-					<div><button class={ style.calender} onClick={this.showCalendar} ><img class={ style.homebutton} src="../../assets/icons/wind.png"/></button></div>
-					<div><button class={ style.map} onClick={this.showCalendar} ><img class={ style.mapbutton} src="../../assets/icons/map.png"/></button></div>
+                    <div><button class={ style.wind} onClick={this.showWind} ><img class={ style.windbutton}  src="../../assets/icons/wind.png"/></button></div>
+					<div><button class={ style.calender} onClick={this.showHome} ><img class={ style.homebutton} src="../../assets/icons/home.png"/></button></div>
+					<div><button class={ style.map} onClick={this.showMap} ><img class={ style.mapbutton} src="../../assets/icons/map.png"/></button></div>
               	
             </div>
 		);
             }
-            else{
-                return(<div><Iphone/></div>);
+            else if(this.state.wind == true){
+                console.log("hhdhdhdhdhhd#2")
+                return(
+                    <div>
+                        <Wind/>
+                    </div>);
+            }else if(this.state.map == true){
+                console.log("hhdhdhdhdhhd#2")
+                return(
+                    <div>
+                        <Map/>
+                    </div>);
+            }else{
+                return(
+                    <div>
+                        <Iphone/>
+                    </div>
+                )
             }
 	
 	
@@ -210,8 +227,16 @@ export default class Calendar extends Component {
     }
     showHome = () => {
 		this.setState({Home: true})
+        this.setState({calender:false})
+
 
 	}
+    showWind = () => {
+		this.setState({wind: true})
+        this.setState({calender:false})
+		console.log("Apple Raspberry")
+	}
+
 	parseCalendarResponse = (parsed_json) => {
 		var AllWeatherData = parsed_json['list'];
         var locate = parsed_json['city']['name'];
